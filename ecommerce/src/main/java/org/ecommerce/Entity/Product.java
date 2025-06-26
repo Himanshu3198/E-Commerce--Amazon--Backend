@@ -4,11 +4,10 @@ package org.ecommerce.Entity;
 import jakarta.persistence.*;
 import org.ecommerce.Enum.AvailabilityStatus;
 import org.ecommerce.Enum.Category;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 
 @Entity
 @Table(name = "product")
-public class ProductEntity {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +29,12 @@ public class ProductEntity {
     @Column(name = "availability",nullable = false)
     @Enumerated(EnumType.STRING)
     private AvailabilityStatus availabilityStatus;
+
+    @Column(name = "image_url",nullable = true,unique = true)
+    private String image;
+
+    @Column(name = "quantity",nullable = false)
+    private Long quantity;
 
     @OneToMany()
     @Column(name = "rating_id")
@@ -66,27 +71,53 @@ public class ProductEntity {
         return rating;
     }
 
-    public void setProductName(String productName) {
+    public Long getQuantity(){
+        return quantity;
+    }
+
+    public String getImage(){return image;}
+
+    public Product setProductName(String productName) {
         this.productName = productName;
+        return this;
     }
 
-    public void setDescription(String description) {
+    public Product setDescription(String description) {
+
         this.description = description;
+        return this;
     }
 
-    public void setPrice(Double price) {
+    public Product setPrice(Double price)
+    {
         this.price = price;
+        return this;
     }
 
-    public void setCategory(Category category) {
+    public Product setCategory(Category category)
+    {
         this.category = category;
+        return this;
     }
 
-    public void setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
+    public Product setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
         this.availabilityStatus = availabilityStatus;
+        return this;
     }
 
-    public void setRating(Rating rating) {
+    public Product setRating(Rating rating) {
         this.rating = rating;
+        return this;
     }
+
+    public Product setQuantity(Long quantity){
+        this.quantity = quantity;
+        return this;
+    }
+
+    public Product setImage(String image){
+        this.image = image;
+        return this;
+    }
+
 }

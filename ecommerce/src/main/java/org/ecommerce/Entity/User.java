@@ -2,13 +2,10 @@ package org.ecommerce.Entity;
 
 import jakarta.persistence.*;
 import org.ecommerce.Enum.Role;
-import org.springframework.boot.autoconfigure.web.WebProperties;
-
-import javax.annotation.processing.Generated;
 
 @Entity
 @Table(name = "user")
-public class UserEntity {
+public class User {
 
        @Id
        @GeneratedValue(strategy = GenerationType.IDENTITY)
