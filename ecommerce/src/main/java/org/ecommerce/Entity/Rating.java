@@ -14,7 +14,12 @@ public class Rating {
     private Long rating;
 
     @Column(name = "review",nullable = true)
-    private Long review;
+    private String review;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+
 
 //    Getter and Setter
     public Long getId() {
@@ -24,16 +29,27 @@ public class Rating {
     public Long getRating() {
         return rating;
     }
+    public User getUser() {return user;}
 
-    public void setRating(Long rating) {
+    public Rating setRating(Long rating) {
+
         this.rating = rating;
+        return this;
     }
 
-    public Long getReview() {
+    public String getReview() {
         return review;
     }
 
-    public void setReview(Long review) {
+    public Rating setReview(String review) {
         this.review = review;
+        return this;
     }
+
+    public Rating setUser(User user){
+        this.user = user;
+        return this;
+    }
+
+
 }

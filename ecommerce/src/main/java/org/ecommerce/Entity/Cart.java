@@ -101,8 +101,32 @@ public class Cart {
     }
 
 
+    @PrePersist
+    @PreUpdate
+    @PreRemove
+    public void addToCart(CartItem cartItem){
+        cartItems.add(cartItem);
+        calculateTotal();
+    }
 
+    @PrePersist
+    @PreUpdate
+    @PreRemove
+    public void removeFromCart(CartItem cartItem){
+        cartItems.remove(cartItem);
+        calculateTotal();
+    }
 
+    @PrePersist
+    @PreUpdate
+    @PreRemove
+    public void calculateTotal(){
 
+        double total = 0.0;
+        for(var item:cartItems){
+            total = total + (item.getQuantity()*getTotalAmount());
+        }
+        this.totalAmount = total - getDiscount();
+    }
 
 }
