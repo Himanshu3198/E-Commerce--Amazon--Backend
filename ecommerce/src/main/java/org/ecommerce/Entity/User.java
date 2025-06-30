@@ -2,6 +2,11 @@ package org.ecommerce.Entity;
 
 import jakarta.persistence.*;
 import org.ecommerce.Enum.Role;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -11,28 +16,40 @@ public class User {
        @GeneratedValue(strategy = GenerationType.IDENTITY)
        private Long id;
 
-       @Column(name = "name",nullable = false)
+       @Column(name = "name", nullable = false)
        private String name;
 
-       @Column(name = "Email",nullable = false)
+       @Column(name = "email", nullable = false)
        private String email;
 
-       @Column(name = "phone",nullable = false)
+       @Column(name = "phone", nullable = false)
        private String number;
 
-       @Column(name = "password",nullable = false)
+       @Column(name = "password", nullable = false)
        private String password;
 
-       @Column(name = "address",nullable = false)
-       private String address;
+       @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+       private List<Address> addresses;
 
-       @Column(name = "is_login",nullable = false)
+       @Column(name = "is_login", nullable = false)
        private Boolean isLogin;
 
-       @Column(name = "role",nullable = false)
        @Enumerated(EnumType.STRING)
+       @Column(name = "role", nullable = false)
        private Role role;
 
+       @Column(name = "wallet", nullable = false)
+       private Double wallet;
+
+       @CreationTimestamp
+       @Column(name = "created_at")
+       private LocalDateTime createdAt;
+
+       @UpdateTimestamp
+       @Column(name = "updated_at")
+       private LocalDateTime updatedAt;
+
+       // Getters
        public Long getId() {
               return id;
        }
@@ -41,55 +58,95 @@ public class User {
               return name;
        }
 
-       public void setName(String name) {
-              this.name = name;
-       }
-
        public String getEmail() {
               return email;
-       }
-
-       public void setEmail(String email) {
-              this.email = email;
        }
 
        public String getNumber() {
               return number;
        }
 
-       public void setNumber(String number) {
-              this.number = number;
-       }
-
        public String getPassword() {
               return password;
        }
 
-       public void setPassword(String password) {
-              this.password = password;
-       }
-
-       public String getAddress() {
-              return address;
-       }
-
-       public void setAddress(String address) {
-              this.address = address;
+       public List<Address> getAddresses() {
+              return addresses;
        }
 
        public Boolean getLogin() {
               return isLogin;
        }
 
-       public void setLogin(Boolean login) {
-              isLogin = login;
-       }
-
        public Role getRole() {
               return role;
        }
 
-       public void setRole(Role role) {
+       public Double getWallet() {
+              return wallet;
+       }
+
+       public LocalDateTime getCreatedAt() {
+              return createdAt;
+       }
+
+       public LocalDateTime getUpdatedAt() {
+              return updatedAt;
+       }
+
+       // Chained Setters
+       public User setId(Long id) {
+              this.id = id;
+              return this;
+       }
+
+       public User setName(String name) {
+              this.name = name;
+              return this;
+       }
+
+       public User setEmail(String email) {
+              this.email = email;
+              return this;
+       }
+
+       public User setNumber(String number) {
+              this.number = number;
+              return this;
+       }
+
+       public User setPassword(String password) {
+              this.password = password;
+              return this;
+       }
+
+       public User setAddresses(List<Address> addresses) {
+              this.addresses = addresses;
+              return this;
+       }
+
+       public User setLogin(Boolean login) {
+              this.isLogin = login;
+              return this;
+       }
+
+       public User setRole(Role role) {
               this.role = role;
+              return this;
+       }
+
+       public User setWallet(Double wallet) {
+              this.wallet = wallet;
+              return this;
+       }
+
+       public User setCreatedAt(LocalDateTime createdAt) {
+              this.createdAt = createdAt;
+              return this;
+       }
+
+       public User setUpdatedAt(LocalDateTime updatedAt) {
+              this.updatedAt = updatedAt;
+              return this;
        }
 }
