@@ -24,7 +24,7 @@ public class ProductServiceImp implements IProductService {
 
     @Override
     @Transactional
-    public void createProduct(Product product) {
+    public void addProduct(Product product) {
         try {
             productRepository.save(product);
             LOGGER.info("Product saved successfully: {}", product);

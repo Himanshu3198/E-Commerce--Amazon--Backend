@@ -99,27 +99,4 @@ public class Cart {
         this.updatedAt = updatedAt;
         return this;
     }
-
-    // === Business Logic (should be used in Service Layer) ===
-    public void addToCart(CartItem cartItem) {
-        cartItems.add(cartItem);
-        cartItem.setCart(this); // Maintain bidirectional link
-        calculateTotal();
-    }
-
-    public void removeFromCart(CartItem cartItem) {
-        cartItems.remove(cartItem);
-        cartItem.setCart(null); // Break bidirectional link
-        calculateTotal();
-    }
-
-    public void calculateTotal() {
-        double total = 0.0;
-        for (CartItem item : cartItems) {
-            if (item.getProduct() != null && item.getQuantity() != null) {
-                total += item.getQuantity() * item.getProduct().getPrice(); // assuming product has getPrice()
-            }
-        }
-        this.totalAmount = total - (discount != null ? discount : 0.0);
-    }
 }

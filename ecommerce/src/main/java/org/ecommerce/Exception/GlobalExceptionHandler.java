@@ -54,5 +54,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex){
+        ErrorResponse errorResponse = new ErrorResponse(
+          "RESOURCE_NOT_FOUND",
+          ex.getMessage(),
+          "Check if Resource exists in DB or not"
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
 
 }

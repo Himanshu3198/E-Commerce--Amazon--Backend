@@ -94,14 +94,4 @@ public class CartItem {
         return this;
     }
 
-    // === Helper Methods ===
-    public void increaseQuantity() {
-        this.quantity++;
-    }
-
-    public void decreaseQuantity() {
-        if (this.quantity > 1) {
-            this.quantity--;
-        }
-    }
 }
