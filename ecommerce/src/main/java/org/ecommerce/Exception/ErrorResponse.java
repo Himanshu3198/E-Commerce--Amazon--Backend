@@ -3,7 +3,7 @@ package org.ecommerce.Exception;
 
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class ErrorResponse {
 
     private String errorCode;

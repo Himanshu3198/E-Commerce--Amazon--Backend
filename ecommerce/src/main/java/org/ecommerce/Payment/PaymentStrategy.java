@@ -1,9 +1,9 @@
 package org.ecommerce.Payment;
 
-import org.BookMyShow.Entity.User;
-import org.BookMyShow.Enum.PaymentType;
+import org.ecommerce.Entity.User;
+import org.ecommerce.Enum.PaymentMethod;
 
 public interface PaymentStrategy {
-    public boolean pay(String bookingId, Double amount, User user);
-    public PaymentType getType();
+    public boolean pay(String orderId, Double amount, User user);
+    public PaymentMethod getType();
 }

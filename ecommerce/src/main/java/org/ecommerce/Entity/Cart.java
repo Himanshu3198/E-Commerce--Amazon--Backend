@@ -1,11 +1,11 @@
 package org.ecommerce.Entity;
 
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,17 +17,17 @@ public class Cart {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User  customer;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User customer;
 
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
-    private List<CartItem> cartItems;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<CartItem> cartItems = new ArrayList<>();
 
     @Column(name = "total_amount")
-    private Double totalAmount;
+    private Double totalAmount = 0.0;
 
     @Column(name = "discount")
-    private Double discount;
+    private Double discount = 0.0;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -35,7 +35,7 @@ public class Cart {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // Getters
+    // === Getters ===
     public Long getId() {
         return id;
     }
@@ -64,7 +64,7 @@ public class Cart {
         return updatedAt;
     }
 
-    // Chained Setters
+    // === Setters (Chained) ===
     public Cart setId(Long id) {
         this.id = id;
         return this;
@@ -100,33 +100,26 @@ public class Cart {
         return this;
     }
 
-
-    @PrePersist
-    @PreUpdate
-    @PreRemove
-    public void addToCart(CartItem cartItem){
+    // === Business Logic (should be used in Service Layer) ===
+    public void addToCart(CartItem cartItem) {
         cartItems.add(cartItem);
+        cartItem.setCart(this); // Maintain bidirectional link
         calculateTotal();
     }
 
-    @PrePersist
-    @PreUpdate
-    @PreRemove
-    public void removeFromCart(CartItem cartItem){
+    public void removeFromCart(CartItem cartItem) {
         cartItems.remove(cartItem);
+        cartItem.setCart(null); // Break bidirectional link
         calculateTotal();
     }
 
-    @PrePersist
-    @PreUpdate
-    @PreRemove
-    public void calculateTotal(){
-
+    public void calculateTotal() {
         double total = 0.0;
-        for(var item:cartItems){
-            total = total + (item.getQuantity()*getTotalAmount());
+        for (CartItem item : cartItems) {
+            if (item.getProduct() != null && item.getQuantity() != null) {
+                total += item.getQuantity() * item.getProduct().getPrice(); // assuming product has getPrice()
+            }
         }
-        this.totalAmount = total - getDiscount();
+        this.totalAmount = total - (discount != null ? discount : 0.0);
     }
-
 }

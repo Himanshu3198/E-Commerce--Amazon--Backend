@@ -1,9 +1,7 @@
 package org.ecommerce.Entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import org.hibernate.action.internal.OrphanRemovalAction;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,26 +15,30 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id",nullable = false)
+    // Many CartItems belong to one Product
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "quantity")
-    @Min(value = 0, message = "Product quantity cannot be negative")
+    // Quantity must be at least 1
+    @Min(value = 1, message = "Product quantity must be at least 1")
+    @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    @ManyToOne(fetch =FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name ="cart_id",nullable = false)
+    // Many CartItems belong to one Cart
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
     @CreationTimestamp
-    @Column(name = "created_at")
-    LocalDateTime createdAt;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
+    // === Getters ===
     public Long getId() {
         return id;
     }
@@ -61,11 +63,11 @@ public class CartItem {
         return updatedAt;
     }
 
-//    setter
-public CartItem setId(Long id) {
-    this.id = id;
-    return this;
-}
+    // === Chained Setters ===
+    public CartItem setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public CartItem setProduct(Product product) {
         this.product = product;
@@ -92,4 +94,14 @@ public CartItem setId(Long id) {
         return this;
     }
 
+    // === Helper Methods ===
+    public void increaseQuantity() {
+        this.quantity++;
+    }
+
+    public void decreaseQuantity() {
+        if (this.quantity > 1) {
+            this.quantity--;
+        }
+    }
 }
