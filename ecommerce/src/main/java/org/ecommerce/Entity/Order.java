@@ -27,7 +27,7 @@ public class Order {
     private Double totalAmount;
 
     @Column(name = "shipping_address", nullable = false)
-    private String address;
+    private Address address;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
@@ -58,7 +58,7 @@ public class Order {
         return totalAmount;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
@@ -95,7 +95,7 @@ public class Order {
         return this;
     }
 
-    public Order setAddress(String address) {
+    public Order setAddress(Address address) {
         this.address = address;
         return this;
     }

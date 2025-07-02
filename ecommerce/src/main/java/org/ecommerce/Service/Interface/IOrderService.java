@@ -1,13 +1,19 @@
 package org.ecommerce.Service.Interface;
 
+import org.ecommerce.Entity.Address;
 import org.ecommerce.Entity.Order;
 import org.ecommerce.Enum.OrderStatus;
 
-public class IOrderService {
+import java.util.List;
 
-    Order placeOrder(Long userId);
+public interface IOrderService{
+
+
+
+    Order placeOrder(Long userId, Address address);
     Order cancelOrder(Long orderId);
     void updateOrderStatus(long orderId, OrderStatus orderStatus);
     Order getOrderById(Long orderId);
-    Order getAllOrder();
+    List<Order> getAllOrder();
+    void updateOrder(Order order);
 }

@@ -63,6 +63,15 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+    @ExceptionHandler(OrderFailedException.class)
+    public ResponseEntity<ErrorResponse> handleOrderNotFound(OrderNotFoundException ex){
+        ErrorResponse errorResponse = new ErrorResponse(
+                "ORDER_NOT_FOUND",
+                ex.getMessage(),
+                "check orderId already exist or not"
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
 
 
 }

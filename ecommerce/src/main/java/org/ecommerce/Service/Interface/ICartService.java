@@ -14,6 +14,6 @@ public interface ICartService {
 
     Cart getCartByUserId(Long userId);
 
-    void clearCart(Long userId); // Optional but useful
+    void clearCart(Long userId);
 }
 
