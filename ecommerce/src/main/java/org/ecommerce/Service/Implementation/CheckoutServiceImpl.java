@@ -1,5 +1,6 @@
 package org.ecommerce.Service.Implementation;
 
+import org.ecommerce.Entity.Cart;
 import org.ecommerce.Entity.Order;
 import org.ecommerce.Entity.OrderItem;
 import org.ecommerce.Enum.OrderStatus;
@@ -7,8 +8,10 @@ import org.ecommerce.Enum.PaymentMethod;
 import org.ecommerce.Exception.CheckoutException;
 import org.ecommerce.Exception.PaymentFailedException;
 import org.ecommerce.Exception.ResourceNotFoundException;
+import org.ecommerce.Exception.UserCartException;
 import org.ecommerce.Payment.PaymentFactory;
 import org.ecommerce.Payment.PaymentStrategy;
+import org.ecommerce.Service.Interface.ICartService;
 import org.ecommerce.Service.Interface.ICheckoutService;
 import org.ecommerce.Service.Interface.IInventoryManager;
 import org.ecommerce.Service.Interface.IOrderService;
@@ -26,10 +29,12 @@ public class CheckoutServiceImpl implements ICheckoutService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckoutServiceImpl.class);
     private final IOrderService orderService;
     private final IInventoryManager inventoryManager;
+    private final ICartService cartService;
 
-    public CheckoutServiceImpl(IOrderService orderService, IInventoryManager inventoryManager) {
+    public CheckoutServiceImpl(IOrderService orderService, IInventoryManager inventoryManager,ICartService cartService) {
         this.orderService = orderService;
         this.inventoryManager = inventoryManager;
+        this.cartService = cartService;
     }
 
     @Override
@@ -38,7 +43,6 @@ public class CheckoutServiceImpl implements ICheckoutService {
 
         try {
             Order order = orderService.getOrderById(orderId);
-
             PaymentStrategy paymentStrategy = PaymentFactory.getPaymentStrategy(paymentMethod);
             boolean paymentSuccess = paymentStrategy.pay(String.valueOf(orderId), order.getTotalAmount(), order.getCustomer());
 
@@ -48,9 +52,12 @@ public class CheckoutServiceImpl implements ICheckoutService {
             }
 
             updateOrderStatus(order, OrderStatus.DELIVERED);
+//          update the inventory to deduct the product quantity
             updateInventory(order);
+//          clear the cart once order is placed
+            cartService.clearCart(order.getCustomer().getId());
 
-        } catch (PaymentFailedException | ResourceNotFoundException ex) {
+        } catch (PaymentFailedException | ResourceNotFoundException  | UserCartException ex) {
             LOGGER.warn("Checkout failed: {}", ex.getMessage(), ex);
             throw ex;
         } catch (DataAccessException dae) {
