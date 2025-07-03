@@ -1,14 +1,15 @@
 package org.ecommerce.Service.Interface;
 
+import org.ecommerce.Entity.OrderItem;
 import org.ecommerce.Entity.Product;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface IProductService {
+public interface IInventoryManager {
 
         void addProduct(Product product);
         Product getProductById(Long id);
         List<Product> getAllProducts();
+        void updateProductByOrder(List<OrderItem> orderItems);
 
 }

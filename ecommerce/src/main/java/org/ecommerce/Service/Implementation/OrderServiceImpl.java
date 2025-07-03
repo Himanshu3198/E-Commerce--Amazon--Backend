@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,22 +18,23 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderServiceImp implements IOrderService {
+public class OrderServiceImpl implements IOrderService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImp.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private final OrderRepository orderRepository;
-    private final UserServiceImp userServiceImp;
+    private final UserServiceImpl userServiceImp;
     private final CartServiceImp cartServiceImp;
 
-    public OrderServiceImp(OrderRepository orderRepository, UserServiceImp userServiceImp, CartServiceImp cartServiceImp) {
+    public OrderServiceImpl(OrderRepository orderRepository, UserServiceImpl userServiceImp, CartServiceImp cartServiceImp) {
         this.orderRepository = orderRepository;
         this.userServiceImp = userServiceImp;
         this.cartServiceImp = cartServiceImp;
     }
 
     @Override
-    public Order placeOrder(Long userId, Address address) {
+    @Transactional
+    public synchronized Order placeOrder(Long userId, Address address) {
         try {
             final Cart cart = cartServiceImp.getCartByUserId(userId);
             final User user = userServiceImp.getUserById(userId);
@@ -74,6 +76,7 @@ public class OrderServiceImp implements IOrderService {
     }
 
     @Override
+    @Transactional
     public Order cancelOrder(Long orderId) {
         try {
             final Order order = orderRepository.findById(orderId)
@@ -96,6 +99,7 @@ public class OrderServiceImp implements IOrderService {
     }
 
     @Override
+    @Transactional
     public void updateOrderStatus(long orderId, OrderStatus orderStatus) {
         try {
             final Order order = orderRepository.findById(orderId)
@@ -113,6 +117,7 @@ public class OrderServiceImp implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Order getOrderById(Long orderId) {
         try {
             return orderRepository.findById(orderId)
@@ -126,6 +131,7 @@ public class OrderServiceImp implements IOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Order> getAllOrder() {
         try {
             return orderRepository.findAll();
@@ -138,7 +144,8 @@ public class OrderServiceImp implements IOrderService {
     }
 
     @Override
-    public void updateOrder(Order order) {
+    @Transactional
+    public synchronized void updateOrder(Order order) {
         try {
             orderRepository.save(order);
         } catch (DataAccessException dae) {

@@ -18,9 +18,9 @@ public class CartServiceImp implements ICartService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CartServiceImp.class);
     private final CartRepository cartRepository;
-    private final ProductServiceImp productServiceImp;
+    private final InventoryManagerImpl productServiceImp;
 
-    public CartServiceImp(CartRepository cartRepository, ProductServiceImp productServiceImp) {
+    public CartServiceImp(CartRepository cartRepository, InventoryManagerImpl productServiceImp) {
         this.cartRepository = cartRepository;
         this.productServiceImp = productServiceImp;
     }

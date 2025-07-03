@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserServiceImp implements IUserService {
+public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImp.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public UserServiceImp(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
