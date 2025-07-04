@@ -94,4 +94,15 @@ public class CartItem {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "CartItem{" +
+                "id=" + id +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", cart=" + cart +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

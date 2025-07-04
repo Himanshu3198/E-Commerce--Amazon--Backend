@@ -10,18 +10,21 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rating",nullable = true)
+    @Column(name = "rating")
     private Long rating;
 
-    @Column(name = "review",nullable = true)
+    @Column(name = "review")
     private String review;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-//    Getter and Setter
+    // Getter and Setter
     public Long getId() {
         return id;
     }
@@ -29,10 +32,8 @@ public class Rating {
     public Long getRating() {
         return rating;
     }
-    public User getUser() {return user;}
 
     public Rating setRating(Long rating) {
-
         this.rating = rating;
         return this;
     }
@@ -46,10 +47,21 @@ public class Rating {
         return this;
     }
 
-    public Rating setUser(User user){
+    public User getUser() {
+        return user;
+    }
+
+    public Rating setUser(User user) {
         this.user = user;
         return this;
     }
 
+    public Product getProduct() {
+        return product;
+    }
 
+    public Rating setProduct(Product product) {
+        this.product = product;
+        return this;
+    }
 }

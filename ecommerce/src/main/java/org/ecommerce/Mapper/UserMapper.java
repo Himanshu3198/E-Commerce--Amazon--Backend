@@ -3,6 +3,9 @@ package org.ecommerce.Mapper;
 import org.ecommerce.DTO.Request.UserDTO;
 import org.ecommerce.Entity.User;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserMapper {
     public static User toEntity(UserDTO userDTO){
         if(userDTO == null){
@@ -19,5 +22,15 @@ public class UserMapper {
                 .setPassword(userDTO.password())
                 .setNumber(userDTO.phone())
                 .setRole(userDTO.role());
+    }
+
+    public static Map<String,String> toDTO(User user){
+        Map<String,String> response = new HashMap<>();
+        response.put("userId",user.getId().toString());
+        response.put("userName", user.getName());
+        response.put("userEmail", user.getEmail());
+        response.put("userNumber", user.getNumber());
+        response.put("userAddresses",user.getAddresses().toString());
+        return  response;
     }
 }

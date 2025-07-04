@@ -114,4 +114,18 @@ public class Order {
         this.updatedAt = updatedAt;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderItems=" + orderItems +
+                ", customer=" + customer +
+                ", totalAmount=" + totalAmount +
+                ", address=" + address +
+                ", orderStatus=" + orderStatus +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

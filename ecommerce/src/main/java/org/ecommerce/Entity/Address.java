@@ -118,6 +118,18 @@ public class Address {
         return this;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", streetName='" + streetName + '\'' +
+                ", locality='" + locality + '\'' +
+                ", state='" + state + '\'' +
+                ", city='" + city + '\'' +
+                ", user=" + user +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

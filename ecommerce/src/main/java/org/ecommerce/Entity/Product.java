@@ -1,9 +1,10 @@
 package org.ecommerce.Entity;
 
-
 import jakarta.persistence.*;
 import org.ecommerce.Enum.AvailabilityStatus;
 import org.ecommerce.Enum.Category;
+
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -13,34 +14,33 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "product_name",nullable = false)
+    @Column(name = "product_name", nullable = false)
     private String productName;
 
-    @Column(name = "description",nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "price",nullable = false)
+    @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "category",nullable = false)
+    @Column(name = "category", nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Column(name = "availability",nullable = false)
+    @Column(name = "availability", nullable = false)
     @Enumerated(EnumType.STRING)
     private AvailabilityStatus availabilityStatus;
 
-    @Column(name = "image_url",nullable = true,unique = true)
+    @Column(name = "image_url", unique = true, nullable = true)
     private String image;
 
-    @Column(name = "quantity",nullable = false)
+    @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    @OneToMany()
-    @Column(name = "rating_id")
-    private Rating rating;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Rating> ratings;
 
-//    Getter and Setter
+    // Getters
 
 
     public Long getId() {
@@ -67,15 +67,22 @@ public class Product {
         return availabilityStatus;
     }
 
-    public Rating getRating() {
-        return rating;
+    public String getImage() {
+        return image;
     }
 
-    public Long getQuantity(){
+    public Long getQuantity() {
         return quantity;
     }
 
-    public String getImage(){return image;}
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public Product setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public Product setProductName(String productName) {
         this.productName = productName;
@@ -83,19 +90,16 @@ public class Product {
     }
 
     public Product setDescription(String description) {
-
         this.description = description;
         return this;
     }
 
-    public Product setPrice(Double price)
-    {
+    public Product setPrice(Double price) {
         this.price = price;
         return this;
     }
 
-    public Product setCategory(Category category)
-    {
+    public Product setCategory(Category category) {
         this.category = category;
         return this;
     }
@@ -105,19 +109,35 @@ public class Product {
         return this;
     }
 
-    public Product setRating(Rating rating) {
-        this.rating = rating;
-        return this;
-    }
-
-    public Product setQuantity(Long quantity){
-        this.quantity = quantity;
-        return this;
-    }
-
-    public Product setImage(String image){
+    public Product setImage(String image) {
         this.image = image;
         return this;
     }
 
+    public Product setQuantity(Long quantity) {
+        this.quantity = quantity;
+        return this;
+    }
+
+    public Product setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", productName='" + productName + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", category=" + category +
+                ", availabilityStatus=" + availabilityStatus +
+                ", image='" + image + '\'' +
+                ", quantity=" + quantity +
+                ", ratings=" + ratings +
+                '}';
+    }
 }
+
+// Setters with method chaining

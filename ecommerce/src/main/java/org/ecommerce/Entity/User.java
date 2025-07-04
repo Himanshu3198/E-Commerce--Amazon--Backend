@@ -149,4 +149,21 @@ public class User {
               this.updatedAt = updatedAt;
               return this;
        }
+
+       @Override
+       public String toString() {
+              return "User{" +
+                      "id=" + id +
+                      ", name='" + name + '\'' +
+                      ", email='" + email + '\'' +
+                      ", number='" + number + '\'' +
+                      ", password='" + password + '\'' +
+                      ", addresses=" + addresses +
+                      ", isLogin=" + isLogin +
+                      ", role=" + role +
+                      ", wallet=" + wallet +
+                      ", createdAt=" + createdAt +
+                      ", updatedAt=" + updatedAt +
+                      '}';
+       }
 }

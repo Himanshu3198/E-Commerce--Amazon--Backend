@@ -99,4 +99,17 @@ public class Cart {
         this.updatedAt = updatedAt;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", customer=" + customer +
+                ", cartItems=" + cartItems +
+                ", totalAmount=" + totalAmount +
+                ", discount=" + discount +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
