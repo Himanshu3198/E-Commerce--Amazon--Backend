@@ -1,7 +1,7 @@
 package Hs.Ecommerce.Core.DTO.Request;
 
 import Hs.Ecommerce.Core.Entity.Address;
-import Hs.Ecommerce.Core.Enum.Role;
+import Hs.Ecommerce.IdentityAccessManagement.RoleType;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public record UserDTO (
         String password,
         List<Address> addresses,
         Boolean isLogin,
-        Role role,
+        RoleType role,
         Double wallet
 
 ){}

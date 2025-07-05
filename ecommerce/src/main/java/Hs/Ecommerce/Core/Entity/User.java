@@ -1,7 +1,7 @@
 package Hs.Ecommerce.Core.Entity;
 
 import jakarta.persistence.*;
-import Hs.Ecommerce.Core.Enum.Role;
+import Hs.Ecommerce.IdentityAccessManagement.RoleType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -36,7 +36,7 @@ public class User {
 
        @Enumerated(EnumType.STRING)
        @Column(name = "role", nullable = false)
-       private Role role;
+       private RoleType role;
 
        @Column(name = "wallet", nullable = false)
        private Double wallet;
@@ -78,7 +78,7 @@ public class User {
               return isLogin;
        }
 
-       public Role getRole() {
+       public RoleType getRole() {
               return role;
        }
 
@@ -130,7 +130,7 @@ public class User {
               return this;
        }
 
-       public User setRole(Role role) {
+       public User setRole(RoleType role) {
               this.role = role;
               return this;
        }
