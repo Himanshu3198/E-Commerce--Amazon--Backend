@@ -34,14 +34,18 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     @Transactional
-    public synchronized Order placeOrder(Long userId, Address address) {
+    public synchronized Order placeOrder(Long userId) {
         try {
             final Cart cart = cartServiceImp.getCartByUserId(userId);
             final User user = userServiceImp.getUserById(userId);
-
             if (cart == null) {
                 throw new ResourceNotFoundException("UserCart not found for userId: " + userId);
             }
+            Address address = cart.getCustomer().getAddresses().getFirst();
+            if(address == null){
+                throw new ResourceNotFoundException("Customer address is null: "+userId);
+            }
+
 
             final Order order = new Order()
                     .setId(Long.valueOf(UUID.randomUUID().toString().replaceAll("[^0-9]", "").substring(0, 8)))

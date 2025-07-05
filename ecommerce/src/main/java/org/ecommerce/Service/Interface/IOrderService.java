@@ -10,7 +10,7 @@ public interface IOrderService{
 
 
 
-    Order placeOrder(Long userId, Address address);
+    Order placeOrder(Long userId);
     Order cancelOrder(Long orderId);
     void updateOrderStatus(long orderId, OrderStatus orderStatus);
     Order getOrderById(Long orderId);
