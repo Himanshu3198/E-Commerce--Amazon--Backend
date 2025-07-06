@@ -17,11 +17,11 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id",referencedColumnName = "id")
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id",referencedColumnName = "id")
     private Order order;
 
     @Column(name = "order_quantity")

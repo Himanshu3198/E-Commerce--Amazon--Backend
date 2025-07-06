@@ -18,7 +18,7 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User customer;
+    private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
@@ -40,8 +40,8 @@ public class Cart {
         return id;
     }
 
-    public User getCustomer() {
-        return customer;
+    public User getuser() {
+        return user;
     }
 
     public List<CartItem> getCartItems() {
@@ -70,8 +70,8 @@ public class Cart {
         return this;
     }
 
-    public Cart setCustomer(User customer) {
-        this.customer = customer;
+    public Cart setuser(User user) {
+        this.user = user;
         return this;
     }
 
@@ -104,7 +104,7 @@ public class Cart {
     public String toString() {
         return "Cart{" +
                 "id=" + id +
-                ", customer=" + customer +
+                ", user=" + user +
                 ", cartItems=" + cartItems +
                 ", totalAmount=" + totalAmount +
                 ", discount=" + discount +

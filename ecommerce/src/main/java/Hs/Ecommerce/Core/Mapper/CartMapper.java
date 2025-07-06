@@ -11,7 +11,7 @@ public class CartMapper {
      public static Map<String,String> toDTO(Cart cart){
          if(cart == null) throw  new ResourceNotFoundException("cart is null or invalid");
          Map<String,String> response = new HashMap<>();
-         response.put("customer",cart.getCustomer().getName());
+         response.put("customer",cart.getuser().getName());
          response.put("cartItem",cart.getCartItems().toString());
          response.put("discount",cart.getDiscount().toString());
          response.put("totalAmount",cart.getTotalAmount().toString());

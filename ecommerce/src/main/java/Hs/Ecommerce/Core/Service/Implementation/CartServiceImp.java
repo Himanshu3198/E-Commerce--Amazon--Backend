@@ -132,7 +132,7 @@ public class CartServiceImp implements ICartService {
     public Cart getCartByUserId(Long userId) {
         try {
             LOGGER.info("Fetching cart for user ID: {}", userId);
-            return cartRepository.findCartByUserId(userId);
+            return cartRepository.findCartByUser_Id(userId);
         } catch (DataAccessException dae) {
             throw new RuntimeException("Database error while fetching cart: " + dae.getMessage());
         }

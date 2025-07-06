@@ -13,20 +13,20 @@ import java.util.List;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
     private User customer;
 
     @Column(name = "total_amount")
     private Double totalAmount;
 
-    @Column(name = "shipping_address", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipping_address_id", referencedColumnName = "id", nullable = false)
     private Address address;
 
     @Enumerated(EnumType.STRING)

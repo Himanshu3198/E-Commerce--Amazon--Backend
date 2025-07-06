@@ -13,7 +13,8 @@ import java.util.List;
 public class User {
 
        @Id
-       @Column(name = "order_id",nullable = false,unique = true)
+       @GeneratedValue(strategy = GenerationType.IDENTITY)
+       @Column(name = "id",nullable = false,unique = true)
        private Long id;
 
        @Column(name = "name", nullable = false)
@@ -40,6 +41,10 @@ public class User {
 
        @Column(name = "wallet", nullable = false)
        private Double wallet;
+
+       @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+       private Cart cart;
+
 
        @CreationTimestamp
        @Column(name = "created_at")

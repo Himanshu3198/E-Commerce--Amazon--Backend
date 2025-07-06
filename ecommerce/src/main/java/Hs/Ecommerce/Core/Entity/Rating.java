@@ -17,11 +17,11 @@ public class Rating {
     private String review;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id",referencedColumnName = "id")
     private Product product;
 
     // Getter and Setter

@@ -14,6 +14,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id",nullable = true)
     private Long id;
     @Column(name = "house_number",nullable = false)
     private String houseNumber;
@@ -26,8 +27,8 @@ public class Address {
     @Column(name = "city",nullable = false )
     private String city;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @CreationTimestamp

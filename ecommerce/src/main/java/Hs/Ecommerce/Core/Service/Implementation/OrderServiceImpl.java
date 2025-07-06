@@ -1,8 +1,7 @@
 package Hs.Ecommerce.Core.Service.Implementation;
 
 import Hs.Ecommerce.Core.Entity.*;
-import org.ecommerce.Entity.*;
-import org.ecommerce.core.Entity.*;
+
 import Hs.Ecommerce.Core.Enum.OrderStatus;
 import Hs.Ecommerce.Core.Exception.OrderNotFoundException;
 import Hs.Ecommerce.Core.Exception.ResourceNotFoundException;
@@ -43,7 +42,7 @@ public class OrderServiceImpl implements IOrderService {
             if (cart == null) {
                 throw new ResourceNotFoundException("UserCart not found for userId: " + userId);
             }
-            Address address = cart.getCustomer().getAddresses().getFirst();
+            Address address = cart.getuser().getAddresses().getFirst();
             if(address == null){
                 throw new ResourceNotFoundException("Customer address is null: "+userId);
             }

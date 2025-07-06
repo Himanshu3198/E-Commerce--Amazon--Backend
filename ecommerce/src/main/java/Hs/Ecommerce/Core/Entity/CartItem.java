@@ -17,7 +17,7 @@ public class CartItem {
 
     // Many CartItems belong to one Product
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false,referencedColumnName = "id")
     private Product product;
 
     // Quantity must be at least 1
@@ -27,7 +27,7 @@ public class CartItem {
 
     // Many CartItems belong to one Cart
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", nullable = false)
+    @JoinColumn(name = "cart_id", nullable = false,referencedColumnName = "id")
     private Cart cart;
 
     @CreationTimestamp

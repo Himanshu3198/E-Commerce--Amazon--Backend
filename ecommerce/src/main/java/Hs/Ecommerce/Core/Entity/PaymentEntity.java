@@ -16,11 +16,11 @@ public class PaymentEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false,referencedColumnName = "id")
     private Order order;
 
     @Enumerated(EnumType.STRING)
