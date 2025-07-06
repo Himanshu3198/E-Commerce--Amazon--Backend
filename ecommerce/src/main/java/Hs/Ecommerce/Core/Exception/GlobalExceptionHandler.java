@@ -73,5 +73,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
+    @ExceptionHandler(RatingException.class)
+    public ResponseEntity<ErrorResponse> handleRatingException(RatingException ex){
+        ErrorResponse errorResponse = new ErrorResponse(
+                "RATING_EXCEPTION",
+                ex.getMessage(),
+                "check the user and product exist"
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
 
 }
