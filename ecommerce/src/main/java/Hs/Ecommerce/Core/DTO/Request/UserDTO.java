@@ -10,7 +10,7 @@ public record UserDTO (
         String email,
         String phone,
         String password,
-        List<Address> addresses,
+        List<AddressDTO> addresses,
         Boolean isLogin,
         RoleType role,
         Double wallet
