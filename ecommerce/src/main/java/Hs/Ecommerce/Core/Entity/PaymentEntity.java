@@ -1,5 +1,6 @@
 package Hs.Ecommerce.Core.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import Hs.Ecommerce.Core.Enum.PaymentStatus;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,10 +18,12 @@ public class PaymentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false,referencedColumnName = "id")
+    @JsonIgnore
     private Order order;
 
     @Enumerated(EnumType.STRING)

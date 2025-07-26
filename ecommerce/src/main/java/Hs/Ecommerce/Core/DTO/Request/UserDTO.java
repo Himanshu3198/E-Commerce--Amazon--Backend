@@ -1,6 +1,5 @@
 package Hs.Ecommerce.Core.DTO.Request;
 
-import Hs.Ecommerce.Core.Entity.Address;
 import Hs.Ecommerce.IdentityAccessManagement.RoleType;
 
 import java.util.List;

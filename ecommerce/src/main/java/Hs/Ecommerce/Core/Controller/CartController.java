@@ -1,6 +1,7 @@
 package Hs.Ecommerce.Core.Controller;
 
 import Hs.Ecommerce.Core.DTO.Request.CartDTO;
+import Hs.Ecommerce.Core.DTO.Response.CartResponseDTO;
 import Hs.Ecommerce.Core.Entity.Cart;
 import Hs.Ecommerce.Core.Mapper.CartMapper;
 import Hs.Ecommerce.Core.Service.Interface.ICartService;
@@ -53,7 +54,7 @@ public class CartController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Map<String, String>> getUserCart(@PathVariable Long userId) {
+    public ResponseEntity<CartResponseDTO> getUserCart(@PathVariable Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
         LOGGER.info("Fetched cart for user: {}", userId);
         return ResponseEntity.ok(CartMapper.toDTO(cart)); // Consider returning a CartDTO or ApiResponse

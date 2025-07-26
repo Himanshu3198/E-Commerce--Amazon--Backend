@@ -6,6 +6,7 @@ import Hs.Ecommerce.Core.Entity.Product;
 import Hs.Ecommerce.Core.Exception.ResourceNotFoundException;
 import Hs.Ecommerce.Core.Repository.CartRepository;
 import Hs.Ecommerce.Core.Service.Interface.ICartService;
+import Hs.Ecommerce.Core.Service.Interface.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -19,10 +20,12 @@ public class CartServiceImp implements ICartService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CartServiceImp.class);
     private final CartRepository cartRepository;
     private final InventoryManagerImpl productServiceImp;
+    private final IUserService userService;
 
-    public CartServiceImp(CartRepository cartRepository, InventoryManagerImpl productServiceImp) {
+    public CartServiceImp(CartRepository cartRepository, InventoryManagerImpl productServiceImp, IUserService userService) {
         this.cartRepository = cartRepository;
         this.productServiceImp = productServiceImp;
+        this.userService = userService;
     }
 
     @Override
@@ -30,8 +33,12 @@ public class CartServiceImp implements ICartService {
         try {
             Cart cart = getCartByUserId(userId);
             if (cart == null) {
-                throw new ResourceNotFoundException("User cart not found for user ID: " + userId);
-            }
+
+                cart = new Cart();
+                cart.setUser(userService.getUserById(userId));
+                cart.setCreatedAt(LocalDateTime.now());
+                cart.setUpdatedAt(LocalDateTime.now());
+             }
 
             Product product = productServiceImp.getProductById(productId);
             if (product == null) {
@@ -43,11 +50,11 @@ public class CartServiceImp implements ICartService {
                     .findFirst().orElse(null);
 
             if (existingItem != null) {
-                existingItem.setQuantity(existingItem.getQuantity() + quantity);
+                existingItem.setQuantity((int) (existingItem.getQuantity() + quantity));
             } else {
                 CartItem cartItem = new CartItem()
                         .setProduct(product)
-                        .setQuantity(quantity)
+                        .setQuantity(Math.toIntExact(quantity))
                         .setCart(cart)
                         .setCreatedAt(LocalDateTime.now())
                         .setUpdatedAt(LocalDateTime.now());
@@ -101,7 +108,7 @@ public class CartServiceImp implements ICartService {
         try {
             Cart cart = getCartByUserId(userId);
             CartItem cartItem = getCartItem(cart, productId);
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
+            cartItem.setQuantity((int) (cartItem.getQuantity() + 1));
             calculateTotal(cart);
             cart.setUpdatedAt(LocalDateTime.now());
             return cartRepository.save(cart);
@@ -117,7 +124,7 @@ public class CartServiceImp implements ICartService {
             Cart cart = getCartByUserId(userId);
             CartItem cartItem = getCartItem(cart, productId);
             if (cartItem.getQuantity() > 1) {
-                cartItem.setQuantity(cartItem.getQuantity() - 1);
+                cartItem.setQuantity((int) (cartItem.getQuantity() - 1));
             }
             calculateTotal(cart);
             cart.setUpdatedAt(LocalDateTime.now());

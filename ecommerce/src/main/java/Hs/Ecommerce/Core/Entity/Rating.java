@@ -1,6 +1,7 @@
 package Hs.Ecommerce.Core.Entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "rating_review")
@@ -11,29 +12,36 @@ public class Rating {
     private Long id;
 
     @Column(name = "rating")
-    private Long rating;
+    private Double rating;
 
     @Column(name = "review")
     private String review;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore // Prevent recursion
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id",referencedColumnName = "id")
+    @JoinColumn(name = "product_id")
+    @JsonIgnore // Prevent recursion
     private Product product;
 
-    // Getter and Setter
+    // Getters and Setters with method chaining
     public Long getId() {
         return id;
     }
 
-    public Long getRating() {
+    public Rating setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Double getRating() {
         return rating;
     }
 
-    public Rating setRating(Long rating) {
+    public Rating setRating(Double rating) {
         this.rating = rating;
         return this;
     }

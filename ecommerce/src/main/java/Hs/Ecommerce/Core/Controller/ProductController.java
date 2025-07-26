@@ -1,6 +1,7 @@
 package Hs.Ecommerce.Core.Controller;
 
 
+import Hs.Ecommerce.Core.DTO.Response.ProductResponseDTO;
 import jakarta.validation.Valid;
 import Hs.Ecommerce.Core.DTO.Request.ProductDTO;
 import Hs.Ecommerce.Core.Entity.Product;
@@ -33,14 +34,14 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Map<String,String>> getProductById(@PathVariable Long productId){
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long productId){
         Product product = inventoryManager.getProductById(productId);
         LOGGER.info("Product has been fetch by id: {}",product.toString());
         return ResponseEntity.ok(ProductMapper.toDTO(product));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Map<String,String>>> getAllProducts(){
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts(){
         List<Product> products = inventoryManager.getAllProducts();
         LOGGER.info("All product has been fetched!");
         return ResponseEntity.ok(products.stream().map(ProductMapper::toDTO).toList());

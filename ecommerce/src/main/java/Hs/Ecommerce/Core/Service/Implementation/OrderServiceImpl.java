@@ -1,12 +1,14 @@
 package Hs.Ecommerce.Core.Service.Implementation;
 
+import Hs.Ecommerce.Core.DTO.Response.OrderResponseDTO;
 import Hs.Ecommerce.Core.Entity.*;
-
 import Hs.Ecommerce.Core.Enum.OrderStatus;
 import Hs.Ecommerce.Core.Exception.OrderNotFoundException;
 import Hs.Ecommerce.Core.Exception.ResourceNotFoundException;
+import Hs.Ecommerce.Core.Mapper.OrderMapper;
 import Hs.Ecommerce.Core.Repository.OrderRepository;
 import Hs.Ecommerce.Core.Service.Interface.IOrderService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -35,29 +37,38 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     @Transactional
-    public synchronized Order placeOrder(Long userId) {
+    public synchronized OrderResponseDTO placeOrder(Long userId) {
         try {
-            final Cart cart = cartServiceImp.getCartByUserId(userId);
-            final User user = userServiceImp.getUserById(userId);
+            Cart cart = cartServiceImp.getCartByUserId(userId);
+            User user = userServiceImp.getUserById(userId);
+
             if (cart == null) {
-                throw new ResourceNotFoundException("UserCart not found for userId: " + userId);
-            }
-            Address address = cart.getuser().getAddresses().getFirst();
-            if(address == null){
-                throw new ResourceNotFoundException("Customer address is null: "+userId);
+                throw new ResourceNotFoundException("User cart not found for userId: " + userId);
             }
 
+            Address address = user.getAddresses().isEmpty() ? null : user.getAddresses().getFirst();
+            if (address == null) {
+                throw new ResourceNotFoundException("Customer address is null for userId: " + userId);
+            }
 
-            final Order order = new Order()
-                    .setId(Long.valueOf(UUID.randomUUID().toString().replaceAll("[^0-9]", "").substring(0, 8)))
-                    .setOrderStatus(OrderStatus.PENDING)
-                    .setCustomer(user)
-                    .setAddress(address)
-                    .setTotalAmount(cart.getTotalAmount())
-                    .setCreatedAt(LocalDateTime.now())
-                    .setUpdatedAt(LocalDateTime.now());
+            // Generate unique custom ID
+            long generatedId;
+            do {
+                generatedId = Long.parseLong(UUID.randomUUID().toString().replaceAll("[^0-9]", "").substring(0, 12));
+            } while (orderRepository.existsById(generatedId));
 
-            final List<OrderItem> orderItems = cart.getCartItems().stream()
+            // Build Order
+            Order order = new Order();
+            order.setId(generatedId);
+            order.setOrderStatus(OrderStatus.PENDING);
+            order.setCustomer(user);
+            order.setAddress(address);
+            order.setTotalAmount(cart.getTotalAmount());
+            order.setCreatedAt(LocalDateTime.now());
+            order.setUpdatedAt(LocalDateTime.now());
+
+            // Build OrderItems
+            List<OrderItem> orderItems = cart.getCartItems().stream()
                     .map(item -> new OrderItem()
                             .setProduct(item.getProduct())
                             .setOrderQuantity(item.getQuantity())
@@ -68,33 +79,36 @@ public class OrderServiceImpl implements IOrderService {
 
             order.setOrderItems(orderItems);
 
-            return orderRepository.save(order);
+            orderRepository.save(order);
+            return OrderMapper.toDTO(order);
+
         } catch (DataAccessException dae) {
             logAndThrow("Database error occurred while placing order", dae);
         } catch (IndexOutOfBoundsException ioobe) {
-            LOGGER.error("Index error while processing cart items: {}", ioobe.getMessage(), ioobe);
-            throw new RuntimeException("Error while accessing cart or order item list.");
+            logAndThrow("Address or cart item access error", ioobe);
         } catch (Exception ex) {
             logAndThrow("Unexpected error occurred while placing order", ex);
         }
-        return null; // Should not reach here
+        return null;
     }
 
     @Override
     @Transactional
-    public Order cancelOrder(Long orderId) {
+    public OrderResponseDTO cancelOrder(Long orderId) {
         try {
-            final Order order = orderRepository.findById(orderId)
+            Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new OrderNotFoundException("Cannot find order with id: " + orderId));
 
-            final User customer = order.getCustomer();
+            User customer = order.getCustomer();
             customer.setWallet(customer.getWallet() + order.getTotalAmount());
 
-            order.setOrderStatus(OrderStatus.CANCELLED)
-                    .setUpdatedAt(LocalDateTime.now());
+            order.setOrderStatus(OrderStatus.CANCELLED);
+            order.setUpdatedAt(LocalDateTime.now());
 
             userServiceImp.addUser(customer);
-            return orderRepository.save(order);
+            orderRepository.save(order);
+            return OrderMapper.toDTO(order);
+
         } catch (DataAccessException dae) {
             logAndThrow("Database error occurred while cancelling order", dae);
         } catch (Exception ex) {
@@ -107,13 +121,14 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional
     public void updateOrderStatus(long orderId, OrderStatus orderStatus) {
         try {
-            final Order order = orderRepository.findById(orderId)
+            Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new OrderNotFoundException("Cannot find order with id: " + orderId));
 
-            order.setOrderStatus(orderStatus)
-                    .setUpdatedAt(LocalDateTime.now());
+            order.setOrderStatus(orderStatus);
+            order.setUpdatedAt(LocalDateTime.now());
 
-            orderRepository.save(order); // <-- Save updated order
+            orderRepository.save(order);
+
         } catch (DataAccessException dae) {
             logAndThrow("Database error occurred while updating order status", dae);
         } catch (Exception ex) {
@@ -133,6 +148,7 @@ public class OrderServiceImpl implements IOrderService {
             logAndThrow("Unexpected error occurred while retrieving order", ex);
         }
         return null;
+
     }
 
     @Override
@@ -154,9 +170,9 @@ public class OrderServiceImpl implements IOrderService {
         try {
             orderRepository.save(order);
         } catch (DataAccessException dae) {
-            logAndThrow("Database error occurred while retrieving all orders", dae);
+            logAndThrow("Database error occurred while updating order", dae);
         } catch (Exception ex) {
-            logAndThrow("Unexpected error occurred while retrieving all orders", ex);
+            logAndThrow("Unexpected error occurred while updating order", ex);
         }
     }
 

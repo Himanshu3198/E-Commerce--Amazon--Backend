@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import Hs.Ecommerce.IdentityAccessManagement.RoleType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +31,7 @@ public class User {
        private String password;
 
        @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+       @JsonIgnore  // Prevent recursion during serialization
        private List<Address> addresses;
 
        @Column(name = "is_login", nullable = false)
@@ -43,8 +45,8 @@ public class User {
        private Double wallet;
 
        @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+       @JsonIgnore  // Prevent recursion during serialization
        private Cart cart;
-
 
        @CreationTimestamp
        @Column(name = "created_at")
@@ -54,55 +56,18 @@ public class User {
        @Column(name = "updated_at")
        private LocalDateTime updatedAt;
 
-       // Getters
+       // Getters and Setters with chaining
        public Long getId() {
               return id;
        }
 
-       public String getName() {
-              return name;
-       }
-
-       public String getEmail() {
-              return email;
-       }
-
-       public String getNumber() {
-              return number;
-       }
-
-       public String getPassword() {
-              return password;
-       }
-
-       public List<Address> getAddresses() {
-              return addresses;
-       }
-
-       public Boolean getLogin() {
-              return isLogin;
-       }
-
-       public RoleType getRole() {
-              return role;
-       }
-
-       public Double getWallet() {
-              return wallet;
-       }
-
-       public LocalDateTime getCreatedAt() {
-              return createdAt;
-       }
-
-       public LocalDateTime getUpdatedAt() {
-              return updatedAt;
-       }
-
-       // Chained Setters
        public User setId(Long id) {
               this.id = id;
               return this;
+       }
+
+       public String getName() {
+              return name;
        }
 
        public User setName(String name) {
@@ -110,9 +75,17 @@ public class User {
               return this;
        }
 
+       public String getEmail() {
+              return email;
+       }
+
        public User setEmail(String email) {
               this.email = email;
               return this;
+       }
+
+       public String getNumber() {
+              return number;
        }
 
        public User setNumber(String number) {
@@ -120,9 +93,17 @@ public class User {
               return this;
        }
 
+       public String getPassword() {
+              return password;
+       }
+
        public User setPassword(String password) {
               this.password = password;
               return this;
+       }
+
+       public List<Address> getAddresses() {
+              return addresses;
        }
 
        public User setAddresses(List<Address> addresses) {
@@ -130,9 +111,17 @@ public class User {
               return this;
        }
 
+       public Boolean getLogin() {
+              return isLogin;
+       }
+
        public User setLogin(Boolean login) {
-              this.isLogin = login;
+              isLogin = login;
               return this;
+       }
+
+       public RoleType getRole() {
+              return role;
        }
 
        public User setRole(RoleType role) {
@@ -140,9 +129,17 @@ public class User {
               return this;
        }
 
+       public Double getWallet() {
+              return wallet;
+       }
+
        public User setWallet(Double wallet) {
               this.wallet = wallet;
               return this;
+       }
+
+       public LocalDateTime getCreatedAt() {
+              return createdAt;
        }
 
        public User setCreatedAt(LocalDateTime createdAt) {
@@ -150,8 +147,21 @@ public class User {
               return this;
        }
 
+       public LocalDateTime getUpdatedAt() {
+              return updatedAt;
+       }
+
        public User setUpdatedAt(LocalDateTime updatedAt) {
               this.updatedAt = updatedAt;
+              return this;
+       }
+
+       public Cart getCart() {
+              return cart;
+       }
+
+       public User setCart(Cart cart) {
+              this.cart = cart;
               return this;
        }
 
@@ -162,8 +172,6 @@ public class User {
                       ", name='" + name + '\'' +
                       ", email='" + email + '\'' +
                       ", number='" + number + '\'' +
-                      ", password='" + password + '\'' +
-                      ", addresses=" + addresses +
                       ", isLogin=" + isLogin +
                       ", role=" + role +
                       ", wallet=" + wallet +

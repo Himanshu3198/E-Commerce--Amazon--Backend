@@ -1,5 +1,6 @@
 package Hs.Ecommerce.Core.Controller;
 
+import Hs.Ecommerce.Core.DTO.Response.UserResponseDTO;
 import jakarta.validation.Valid;
 import Hs.Ecommerce.Core.DTO.Request.UserDTO;
 import Hs.Ecommerce.Core.Entity.User;
@@ -13,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/ecom/api/users/")
@@ -33,14 +34,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String,String>> getUserById(@PathVariable Long userId){
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId){
          User user = userService.getUserById(userId);
          LOGGER.info("User found by id:{}",user.toString());
          return ResponseEntity.ok(UserMapper.toDTO(user));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Map<String,String>>> getAllUsers(){
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users.stream().map(UserMapper::toDTO).toList());
     }

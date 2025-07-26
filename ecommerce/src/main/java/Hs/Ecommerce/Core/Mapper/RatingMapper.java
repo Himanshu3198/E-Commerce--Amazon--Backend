@@ -1,19 +1,21 @@
 package Hs.Ecommerce.Core.Mapper;
 
+import Hs.Ecommerce.Core.DTO.Request.RatingDTO;
+import Hs.Ecommerce.Core.DTO.Response.ProductSummaryDTO;
+import Hs.Ecommerce.Core.DTO.Response.RatingResponseDTO;
+import Hs.Ecommerce.Core.DTO.Response.UserSummaryDTO;
 import Hs.Ecommerce.Core.Entity.Rating;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class RatingMapper {
 
-    public static Map<String,Object> toDTO(Rating rating){
-        Map<String,Object> response = new HashMap<>();
-        response.put("ratingId",rating.getId());
-        response.put("product",rating.getProduct());
-        response.put("submitBy",rating.getUser());
-        response.put("rating",rating.getRating());
-        response.put("review",rating.getReview());
-        return response;
+    public static RatingResponseDTO toDTO(Rating rating) {
+        return new RatingResponseDTO(
+                rating.getId(),
+                new ProductSummaryDTO(rating.getProduct().getId(), rating.getProduct().getProductName()),
+                new UserSummaryDTO(rating.getUser().getId(), rating.getUser().getName()),
+                rating.getRating(),
+                rating.getReview()
+        );
     }
 }

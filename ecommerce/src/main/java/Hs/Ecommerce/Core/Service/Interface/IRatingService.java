@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IRatingService {
 
-      Rating addRating(Long userId,Long productId,Long rating,String review);
-      Rating updateRating(Long ratingId,Long rating,String review);
+      Rating addRating(Long userId,Long productId,Double rating,String review);
+      Rating updateRating(Long ratingId,Double rating,String review);
       List<Rating> findAllReview(Long productId);
 }

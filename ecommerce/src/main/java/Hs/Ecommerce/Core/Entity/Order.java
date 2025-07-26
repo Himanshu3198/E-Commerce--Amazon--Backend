@@ -1,5 +1,7 @@
 package Hs.Ecommerce.Core.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import Hs.Ecommerce.Core.Enum.OrderStatus;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,10 +18,12 @@ public class Order {
     private Long id;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItem> orderItems;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
+    @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id",unique = false)
+    @JsonIgnore
     private User customer;
 
     @Column(name = "total_amount")
@@ -27,6 +31,7 @@ public class Order {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "shipping_address_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private Address address;
 
     @Enumerated(EnumType.STRING)
@@ -115,17 +120,4 @@ public class Order {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", orderItems=" + orderItems +
-                ", customer=" + customer +
-                ", totalAmount=" + totalAmount +
-                ", address=" + address +
-                ", orderStatus=" + orderStatus +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
 }

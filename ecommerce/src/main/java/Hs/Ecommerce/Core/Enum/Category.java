@@ -2,7 +2,10 @@ package Hs.Ecommerce.Core.Enum;
 
 public enum Category {
 
-      CLOTH,
+    CLOTH,
+    SHOES,
+    BAGS,
     ELECTRONICS,
-    GADGET
+    GADGET,
+
 }

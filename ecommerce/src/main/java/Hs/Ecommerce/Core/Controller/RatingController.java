@@ -1,6 +1,7 @@
 package Hs.Ecommerce.Core.Controller;
 
 import Hs.Ecommerce.Core.DTO.Request.RatingDTO;
+import Hs.Ecommerce.Core.DTO.Response.RatingResponseDTO;
 import Hs.Ecommerce.Core.Entity.Rating;
 import Hs.Ecommerce.Core.Exception.ResourceNotFoundException;
 import Hs.Ecommerce.Core.Mapper.RatingMapper;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/ecom/product/rating")
@@ -32,16 +32,16 @@ public class RatingController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Rating has been added for product: "+ratingDTO.productId());
     }
     @PatchMapping("/update")
-    public ResponseEntity<String> updateRating(@RequestParam Long ratingId,@RequestParam Long rating, @RequestParam String review){
+    public ResponseEntity<String> updateRating(@RequestParam Long ratingId,@RequestParam Double rating, @RequestParam String review){
         ratingService.updateRating(ratingId,rating,review);
         LOGGER.info("Rating has been updated for rating: {}",ratingId);
         return ResponseEntity.status(HttpStatus.CREATED).body("Rating has been updated for rating: "+ratingId);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<List<Map<String, Object>>> AllRatingForProduct(@PathVariable Long productId){
+    public ResponseEntity<List<RatingResponseDTO>> AllRatingForProduct(@PathVariable Long productId){
         List<Rating> ratings = ratingService.findAllReview(productId);
-        if(ratings.isEmpty() || ratings == null){
+        if(ratings.isEmpty()){
             throw new ResourceNotFoundException("Rating not found for productId"+productId);
         }
         return ResponseEntity.ok(ratings.stream().map(RatingMapper::toDTO).toList());

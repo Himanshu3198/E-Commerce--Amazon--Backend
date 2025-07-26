@@ -1,5 +1,6 @@
 package Hs.Ecommerce.Core.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import Hs.Ecommerce.Core.Enum.AvailabilityStatus;
 import Hs.Ecommerce.Core.Enum.Category;
@@ -23,7 +24,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "category", nullable = false)
+    @Column(name = "category", nullable = false,length = 255)
     @Enumerated(EnumType.STRING)
     private Category category;
 
@@ -38,6 +39,7 @@ public class Product {
     private Long quantity;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Rating> ratings;
 
     // Getters

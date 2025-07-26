@@ -1,6 +1,8 @@
 package Hs.Ecommerce.Core.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,14 +20,16 @@ public class OrderItem {
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id",referencedColumnName = "id")
+    @JsonBackReference
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id",referencedColumnName = "id")
+    @JsonIgnore
     private Order order;
 
     @Column(name = "order_quantity")
-    private Long orderQuantity;
+    private Integer orderQuantity;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -46,7 +50,7 @@ public class OrderItem {
         return order;
     }
 
-    public Long getOrderQuantity() {
+    public Integer getOrderQuantity() {
         return orderQuantity;
     }
 
@@ -73,7 +77,7 @@ public class OrderItem {
         return this;
     }
 
-    public OrderItem setOrderQuantity(Long orderQuantity) {
+    public OrderItem setOrderQuantity(Integer orderQuantity) {
         this.orderQuantity = orderQuantity;
         return this;
     }
@@ -88,15 +92,5 @@ public class OrderItem {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "OrderItem{" +
-                "id=" + id +
-                ", product=" + product +
-                ", order=" + order +
-                ", orderQuantity=" + orderQuantity +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
+
 }
