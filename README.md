@@ -44,8 +44,7 @@ Below is the High-Level Architecture Diagram for this project:
 
 ![E-Commerce HLD Diagram](./ecommerce/EcomHLD.drawio.png)
 
-> Make sure the path is correct relative to your README.  
-> In this case, the image is inside a folder named `HLD`.
+
 
 ---
 
